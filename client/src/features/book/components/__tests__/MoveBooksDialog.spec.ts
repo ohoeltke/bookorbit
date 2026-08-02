@@ -17,6 +17,19 @@ vi.mock('@/features/library/composables/useLibraries', () => ({
 
 import MoveBooksDialog from '../MoveBooksDialog.vue'
 
+const DialogRootStub = { name: 'DialogRoot', props: ['open'], emits: ['update:open'], template: '<div><slot /></div>' }
+
+const globalStubs = {
+  stubs: {
+    DialogRoot: DialogRootStub,
+    DialogPortal: { template: '<div><slot /></div>' },
+    DialogOverlay: { template: '<div />' },
+    DialogContent: { template: '<div><slot /></div>' },
+    DialogTitle: { template: '<div><slot /></div>' },
+    DialogDescription: { template: '<div><slot /></div>' },
+  },
+}
+
 function makeLibrary(overrides: Partial<Library> = {}): Library {
   return {
     id: 1,
@@ -26,7 +39,7 @@ function makeLibrary(overrides: Partial<Library> = {}): Library {
   } as Library
 }
 
-function mountDialog(props: { open?: boolean; count?: number; currentLibraryId?: number | null } = {}) {
+function mountDialog(props: { open?: boolean; count?: number; currentLibraryId?: number | null; moving?: boolean } = {}) {
   return mount(MoveBooksDialog, {
     props: {
       open: true,
@@ -34,9 +47,7 @@ function mountDialog(props: { open?: boolean; count?: number; currentLibraryId?:
       currentLibraryId: null,
       ...props,
     },
-    global: {
-      stubs: { Teleport: true },
-    },
+    global: globalStubs,
   })
 }
 
@@ -83,6 +94,17 @@ describe('MoveBooksDialog', () => {
     expect(labels).not.toContain('SF&F')
   })
 
+  it('hides libraries without folders because they cannot receive files', () => {
+    librariesRef.value = [...librariesRef.value, makeLibrary({ id: 4, name: 'Folderless', folders: [] })]
+    const wrapper = mountDialog()
+
+    const labels = wrapper
+      .find('[data-testid="move-library-select"]')
+      .findAll('option')
+      .map((option) => option.text())
+    expect(labels).not.toContain('Folderless')
+  })
+
   it('confirms with the selected library without a folder id for single-folder libraries', async () => {
     const wrapper = mountDialog()
 
@@ -118,24 +140,33 @@ describe('MoveBooksDialog', () => {
     expect(wrapper.emitted('cancel')).toHaveLength(1)
   })
 
-  it('emits cancel from the backdrop', async () => {
+  it('emits cancel when the dialog requests to close', () => {
     const wrapper = mountDialog()
 
-    await wrapper.find('div.absolute.inset-0').trigger('click')
+    wrapper.findComponent(DialogRootStub).vm.$emit('update:open', false)
 
     expect(wrapper.emitted('cancel')).toHaveLength(1)
   })
 
-  it('ignores backdrop and cancel clicks while a move is running', async () => {
-    const wrapper = mount(MoveBooksDialog, {
-      props: { open: true, count: 2, currentLibraryId: null, moving: true },
-      global: { stubs: { Teleport: true } },
-    })
+  it('ignores close requests and cancel clicks while a move is running', async () => {
+    const wrapper = mountDialog({ moving: true })
 
-    await wrapper.find('div.absolute.inset-0').trigger('click')
+    wrapper.findComponent(DialogRootStub).vm.$emit('update:open', false)
     await wrapper.find('[data-testid="move-cancel"]').trigger('click')
 
     expect(wrapper.emitted('cancel')).toBeUndefined()
+  })
+
+  it('shows the multi-library skip hint when the view has no single current library', () => {
+    const wrapper = mountDialog({ currentLibraryId: null })
+
+    expect(wrapper.find('[data-testid="move-multi-library-hint"]').text()).toBe('Books that are already in the selected library are skipped.')
+  })
+
+  it('hides the skip hint when the current library is known and filtered out', () => {
+    const wrapper = mountDialog({ currentLibraryId: 1 })
+
+    expect(wrapper.find('[data-testid="move-multi-library-hint"]').exists()).toBe(false)
   })
 
   it('fetches libraries when opened', () => {

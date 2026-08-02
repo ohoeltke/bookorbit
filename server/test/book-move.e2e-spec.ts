@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { access } from 'fs/promises';
+import { access, readFile } from 'fs/promises';
 import { join } from 'path';
 
 import { and, eq } from 'drizzle-orm';
@@ -57,6 +57,20 @@ describe('Book move between libraries (e2e)', () => {
     });
   }
 
+  // The endpoint streams SSE frames: one outcome event per book plus a final
+  // done summary. Parse the raw body back into structured results.
+  function parseMoveStream(body: string): { results: MoveBookOutcome[]; summary: Record<string, unknown> | null } {
+    const results: MoveBookOutcome[] = [];
+    let summary: Record<string, unknown> | null = null;
+    for (const line of body.split('\n')) {
+      if (!line.startsWith('data: ')) continue;
+      const event = JSON.parse(line.slice(6)) as Record<string, unknown>;
+      if (event.done === true) summary = event;
+      else results.push(event as unknown as MoveBookOutcome);
+    }
+    return { results, summary };
+  }
+
   it(
     'moves a book into another library, re-parenting rows, relocating files, and preserving user state',
     async () => {
@@ -69,9 +83,11 @@ describe('Book move between libraries (e2e)', () => {
 
       const response = await moveBooks({ bookIds: [book.bookId], targetLibraryId: dst.libraryId });
 
-      expect(response.statusCode).toBe(201);
-      const { results } = response.json() as { results: MoveBookOutcome[] };
+      expect(response.statusCode).toBe(200);
+      expect(response.headers['content-type']).toBe('text/event-stream');
+      const { results, summary } = parseMoveStream(response.body);
       expect(results).toEqual([{ bookId: book.bookId, status: 'moved' }]);
+      expect(summary).toMatchObject({ done: true, total: 1, moved: 1, skipped: 0, failed: 0, cancelled: false });
 
       // Book row re-parented; this is the regression guard for
       // book_files_book_folder_consistency_fk (books must be updated before files).
@@ -109,19 +125,22 @@ describe('Book move between libraries (e2e)', () => {
 
       const response = await moveBooks({ bookIds: [book.bookId], targetLibraryId: dst.libraryId });
 
-      expect(response.statusCode).toBe(201);
-      const { results } = response.json() as { results: MoveBookOutcome[] };
-      expect(results).toEqual([{ bookId: book.bookId, status: 'skipped', reason: 'target path already exists on disk' }]);
+      expect(response.statusCode).toBe(200);
+      const { results } = parseMoveStream(response.body);
+      expect(results).toEqual([{ bookId: book.bookId, status: 'skipped', reason: 'target_path_exists' }]);
 
       const [unchanged] = await ctx.db.select().from(books).where(eq(books.id, book.bookId));
       expect(unchanged.libraryId).toBe(src.libraryId);
+      expect(unchanged.libraryFolderId).toBe(src.libraryFolderId);
       await expect(pathExists(join(src.folderPath, 'dupe/book.epub'))).resolves.toBe(true);
+      // The colliding file in the target must not have been overwritten.
+      await expect(readFile(join(dst.folderPath, 'dupe/book.epub'), 'utf8')).resolves.toBe('already here');
     },
     SCENARIO_TIMEOUT_MS,
   );
 
   it(
-    'rejects a target folder that belongs to a different library',
+    'rejects a target folder that belongs to a different library and leaves the book untouched',
     async () => {
       const src = await createLibraryWithFolder(ctx, { name: `move-src-${randomUUID()}` });
       const dst = await createLibraryWithFolder(ctx, { name: `move-dst-${randomUUID()}` });
@@ -134,12 +153,19 @@ describe('Book move between libraries (e2e)', () => {
       });
 
       expect(response.statusCode).toBe(400);
+      expect(response.json()).toMatchObject({ statusCode: 400, message: expect.stringContaining('does not belong to library') });
+
+      const [unchanged] = await ctx.db.select().from(books).where(eq(books.id, book.bookId));
+      expect(unchanged.libraryId).toBe(src.libraryId);
+      expect(unchanged.libraryFolderId).toBe(src.libraryFolderId);
+      await expect(pathExists(join(src.folderPath, 'wrong-folder/book.epub'))).resolves.toBe(true);
+      await expect(pathExists(join(dst.folderPath, 'wrong-folder/book.epub'))).resolves.toBe(false);
     },
     SCENARIO_TIMEOUT_MS,
   );
 
   it(
-    'skips books whose format is not allowed in the target library',
+    'skips books whose format is not allowed in the target library and leaves files in place',
     async () => {
       const src = await createLibraryWithFolder(ctx, { name: `move-src-${randomUUID()}` });
       const dst = await createLibraryWithFolder(ctx, { name: `move-dst-${randomUUID()}`, allowedFormats: ['pdf'] });
@@ -147,9 +173,15 @@ describe('Book move between libraries (e2e)', () => {
 
       const response = await moveBooks({ bookIds: [book.bookId], targetLibraryId: dst.libraryId });
 
-      expect(response.statusCode).toBe(201);
-      const { results } = response.json() as { results: MoveBookOutcome[] };
-      expect(results).toEqual([{ bookId: book.bookId, status: 'skipped', reason: 'format epub not allowed in target library' }]);
+      expect(response.statusCode).toBe(200);
+      const { results } = parseMoveStream(response.body);
+      expect(results).toEqual([{ bookId: book.bookId, status: 'skipped', reason: 'format_not_allowed' }]);
+
+      const [unchanged] = await ctx.db.select().from(books).where(eq(books.id, book.bookId));
+      expect(unchanged.libraryId).toBe(src.libraryId);
+      expect(unchanged.libraryFolderId).toBe(src.libraryFolderId);
+      await expect(pathExists(join(src.folderPath, 'format/book.epub'))).resolves.toBe(true);
+      await expect(pathExists(join(dst.folderPath, 'format/book.epub'))).resolves.toBe(false);
     },
     SCENARIO_TIMEOUT_MS,
   );
