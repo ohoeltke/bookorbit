@@ -1133,7 +1133,15 @@
         "users": "Пользователи",
         "account-activity": "Активность аккаунта",
         "magic-links": "Волшебные ссылки",
-        "oidc": "OIDC / ССО"
+        "oidc": "OIDC / ССО",
+        "server-fonts": "Server Fonts"
+      },
+      "serverFonts": {
+        "title": "Server Fonts",
+        "subtitle": "Upload fonts that every user can pick in the eBook reader, without uploading their own.",
+        "listLabel": "Server fonts",
+        "noFontsYet": "No server fonts yet",
+        "noFontsHint": "Fonts you add here appear in every user's reader."
       }
     },
     "common": {
@@ -1668,7 +1676,12 @@
         "deleteFamilyFailed": "Не удалось удалить семейство шрифтов",
         "demoCannotManage": "Ограниченный демо-аккаунт не может управлять шрифтами",
         "fileAdded": "\"{name}\" добавлен",
-        "uploadFailed": "Загрузка не удалась"
+        "uploadFailed": "Загрузка не удалась",
+        "serverFontsTitle": "Server fonts (shared by admin)",
+        "serverFontsHint": "These fonts come from your server administrator. Turn one off to keep it out of your reader.",
+        "serverFontsShown": "{count} of {total} shown",
+        "serverFontsAllHidden": "All server fonts are hidden. Your reader will only offer built-in and your own fonts.",
+        "serverFontVisibilityFailed": "Failed to update server font visibility"
       },
       "bookDock": {
         "title": "Книжный док-бар",
@@ -2866,7 +2879,6 @@
       "BookDelete": "Удалить книгу",
       "BookBulkMetadataRefresh": "Обновить метаданные книги",
       "BookBulkDelete": "Удалить книги",
-      "BookBulkMove": "Move books",
       "BookBulkCoverReextract": "Извлечь обложки книг",
       "BookBulkSetStatus": "Установить статус книги",
       "BookBulkSetRating": "Установить рейтинг книги",
@@ -2874,6 +2886,7 @@
       "BookBulkUpdateTags": "Обновить теги книги",
       "BookBulkSetMetadataLock": "Установка блокировок метаданных",
       "BookBulkEditMetadata": "Изменить метаданные книги",
+      "BookBulkMoveLibrary": "Move books to another library",
       "BookReadingStateReset": "Сбросить состояние чтения",
       "BookWriteAndRename": "Запись метаданных и переименование файла",
       "CollectionCreate": "Создать коллекцию",
@@ -3332,8 +3345,12 @@
         "isFinished": "завершён",
         "isLocked": "заблокирован",
         "isUnlocked": "разблокирован",
-        "isUpNext": "дальше"
+        "isUpNext": "дальше",
+        "isTrue": "is yes",
+        "isFalse": "is no"
       },
+      "customFieldsGroup": "Custom fields",
+      "customFieldFallback": "Custom field",
       "anyProvider": "Любой провайдер",
       "communityRatingProvider": "Поставщик рейтинга сообщества",
       "loadingLibraries": "Загрузка библиотек...",
@@ -3364,31 +3381,6 @@
     "deleteDialog": {
       "title": "Удалить книгу?",
       "description": "Это навсегда удалит книгу и все ее метаданные, файлы, прогресс чтения и закладки. Это не может быть отменено."
-    },
-    "moveDialog": {
-      "title": "{count, plural, =0 {Move # book to library} few {Move # books to library} many {Move # books to library} one {Move # book to library} other {Move # books to library}}",
-      "description": "Files are moved into the target library's folder. Reading progress, annotations, and collections stay with the books.",
-      "multiLibraryHint": "Books that are already in the selected library are skipped.",
-      "targetLibrary": "Target library",
-      "targetFolder": "Target folder",
-      "selectLibrary": "Select a library…",
-      "selectFolder": "Select a folder…",
-      "move": "Move"
-    },
-    "moveOutcomes": {
-      "book_not_found": "Book not found",
-      "no_source_access": "No access to the source library",
-      "source_access_check_failed": "The source library access check failed",
-      "book_processing": "The book is still processing",
-      "book_missing": "The book's files are missing",
-      "already_in_target": "The book is already in the target library",
-      "format_not_allowed": "The book's format is not allowed in the target library",
-      "target_path_taken": "The target path is already used by another book",
-      "target_path_exists": "A file already exists at the target path",
-      "path_escapes_target": "The resolved file path leaves the target folder",
-      "database_update_failed": "The database update failed",
-      "file_move_failed": "Moving the files failed",
-      "file_move_failed_rollback_incomplete": "Moving the files failed and the rollback was incomplete, please verify the book"
     },
     "bulkEdit": {
       "title": "{count, plural, =0 {Редактировать метаданные - # книга} one {Редактировать метаданные - # книга} few {Редактировать метаданные - # книги} many {Редактировать метаданные - # книги} other {Редактировать метаданные - # книги}}",
@@ -3654,11 +3646,6 @@
         "primary": "Первичный",
         "peek": "Пик",
         "sendViaEmail": "Отправить по электронной почте",
-        "moveToLibrary": "Move to Library",
-        "moveSuccess": "Book moved",
-        "moveFailed": "Failed to move book",
-        "moveNotMoved": "Book was not moved",
-        "moveNotMovedWithReason": "Book was not moved: {reason}",
         "personalReview": {
           "title": "Личный отзыв",
           "toggleAria": "Переключить персональный обзор",
@@ -4108,7 +4095,11 @@
         "seriesPlaceholder": "Серии",
         "moveUp": "Вверх",
         "moveDown": "Сдвинуть вниз",
-        "removeSeries": "Удалить серию"
+        "removeSeries": "Удалить серию",
+        "seriesIndexLabel": "Position in series",
+        "totalLabel": "Books in series",
+        "totalPlaceholder": "of",
+        "totalHint": "Total books in this series. Shared with everyone who has this series."
       }
     },
     "table": {
@@ -4188,6 +4179,69 @@
       },
       "text": {
         "openDetails": "Открыть детали"
+      }
+    },
+    "move": {
+      "title": "{count, plural, one {Move # book} few {Move # books} many {Move # books} other {Move # books}}",
+      "subtitle": "Files move on disk into the destination library. This can change who can see these books.",
+      "searchPlaceholder": "Search libraries",
+      "currentLibrary": "Current",
+      "folderCount": "{count, plural, one {# folder} few {# folders} many {# folders} other {# folders}}",
+      "continue": "Continue",
+      "back": "Back",
+      "confirm": "{count, plural, one {Move # book} few {Move # books} many {Move # books} other {Move # books}}",
+      "action": "Move to library",
+      "review": {
+        "ready": "{count} ready",
+        "collisions": "{count, plural, one {# name conflict} few {# name conflicts} many {# name conflicts} other {# name conflicts}}",
+        "ineligible": "{count} cannot move",
+        "alreadyThere": "{count} already there",
+        "collisionsHeading": "Name conflicts",
+        "ineligibleHeading": "Cannot be moved",
+        "moreCollisions": "and {count} more"
+      },
+      "policy": {
+        "suggested": "Use suggested",
+        "keep_both": "Keep both",
+        "merge": "Merge",
+        "skip": "Skip"
+      },
+      "collision": {
+        "folder_path": "A book already uses this folder name",
+        "file_path": "A file already uses this path",
+        "hash_duplicate": "An identical copy is already in this library"
+      },
+      "ineligible": {
+        "book_not_present": "The files for this book are missing",
+        "no_content_file": "This book has no readable file",
+        "multi_file_target_per_file": "The destination stores one file per book, and this book has {detail} files",
+        "no_source_access": "You cannot edit the library this book is in",
+        "pattern_unresolved": "The destination library has no usable naming pattern",
+        "path_too_long": "The destination path would be too long",
+        "path_outside_target_root": "The destination path would fall outside the library folder"
+      },
+      "warning": {
+        "accessLoss": "{user} will stop seeing {count} of these books",
+        "koboImpact": "{count} books will leave {user}'s Kobo on the next sync",
+        "layout": {
+          "wrap_into_folder": "{count} books will each be placed in their own folder",
+          "dissolve_folder": "{count} book folders will be dissolved into single files"
+        },
+        "crossDevice": "Files move to another drive, so they are copied, verified, then removed."
+      },
+      "progress": {
+        "label": "Moving books to {library}",
+        "failed": "{count} failed"
+      },
+      "done": {
+        "summary": "Moved {count} books to {library}",
+        "merged": "{count} merged with copies already there",
+        "skipped": "{count} skipped",
+        "failed": "{count} failed"
+      },
+      "toast": {
+        "success": "Moved {count} books to {library}",
+        "partial": "Moved {moved} books, {failed} failed"
       }
     }
   },
@@ -4545,7 +4599,6 @@
       "lockAll": "Заблокировать все",
       "unlockAll": "Разблокировать все",
       "exportMetadata": "Экспорт метаданных",
-      "moveToLibrary": "Move to library",
       "deleteSelected": "Удалить выбранные",
       "exitSelection": "Выйти из выбора",
       "downloadFilesZipLabel": "Скачать файлы как ZIP:",
@@ -4722,6 +4775,14 @@
         "upNextInSeries": "Вверх в следующем сезоне",
         "random": "Откройте для себя что-то новое",
         "smartScope": "Умный охват"
+      },
+      "shelfLayout": {
+        "title": "Shelf layout",
+        "description": "Choose how shelves are arranged on larger screens.",
+        "wide": "Wide rows",
+        "wideDescription": "Show one shelf per row.",
+        "twoColumns": "Two columns",
+        "twoColumnsDescription": "Show two shelves per row."
       },
       "reorderHintWidget": "Перетащите для переупорядочения. Переключите, чтобы показать или скрыть виджет.",
       "reorderHintShelf": "Перетащите для переупорядочения. Переключите, чтобы показать или скрыть полку.",
@@ -5895,46 +5956,66 @@
     "settings": {
       "title": "Настройки",
       "ariaLabel": "Настройки чтения",
-      "tabs": {
-        "appearance": "Внешний вид",
-        "text": "Текст",
-        "layout": "Макет"
-      },
-      "appearance": {
-        "mode": "Режим",
+      "reset": "Reset to defaults",
+      "modeLabel": "Color mode",
+      "mode": {
         "light": "Светлая",
-        "dark": "Тёмная",
-        "colorTheme": "Цветовая схема"
+        "dark": "Тёмная"
       },
-      "text": {
-        "fontSize": "Font size",
-        "fontSizeRange": "Диапазон: 10-32px",
-        "lineHeight": "Высота линии",
-        "lineHeightRange": "Range: 0.8-3.0",
-        "fontFamily": "Семейство шрифтов",
-        "fontFamilyDescription": "Выберите встроенные или загруженные шрифты для текста тела.",
-        "builtIn": "Встроенный",
-        "yourFonts": "Ваши шрифты"
+      "textSize": "Text size",
+      "textSizeSmaller": "Smaller text",
+      "textSizeLarger": "Larger text",
+      "pixels": "{value} px",
+      "percent": "{value}%",
+      "pageColor": "Page color",
+      "font": "Font",
+      "fontBuiltIn": "Встроенный",
+      "fontServer": "Server fonts",
+      "fontYours": "Ваши шрифты",
+      "lineSpacing": "Line spacing",
+      "pageWidth": "Page width",
+      "pageWidthNarrow": "Narrow",
+      "pageWidthMedium": "Medium",
+      "pageWidthWide": "Wide",
+      "pageWidthFull": "Full",
+      "readingFlow": "Чтение потока",
+      "flow": {
+        "paginated": "Pages",
+        "scrolled": "Scroll"
       },
-      "layout": {
-        "pageSpreads": "Спреды страниц",
-        "pageSpreadsDescription": "Выберите, как это пары страниц EPUB на основе образа.",
+      "pageSpreads": "Спреды страниц",
+      "pageSpreadsHint": "Выберите, как это пары страниц EPUB на основе образа.",
+      "spread": {
         "bookDefault": "Книга по умолчанию",
-        "singlePage": "Одна страница",
-        "readingFlow": "Чтение потока",
-        "readingFlowDescription": "Переключение между нагруженной и непрерывной прокруткой.",
-        "paginated": "Популярно",
-        "scrolled": "Прокрутка",
-        "textColumns": "Текстовые колонки",
-        "textColumnsRange": "Range: 1-10",
-        "columnGap": "Разрыв столбцов",
-        "columnGapRange": "Range: 0-50%",
-        "maxWidth": "Max width",
-        "maxWidthRange": "Range: 400-1600",
-        "justifyText": "Выровнять текст по ширине",
-        "justifyTextDescription": "Включить выравнивание параграфов всей ширины.",
-        "hyphenation": "Перенос",
-        "hyphenationDescription": "Включить автоматическое перенос слов."
+        "singlePage": "Одна страница"
+      },
+      "advanced": "Advanced layout",
+      "columns": "Columns",
+      "columnsFewer": "Fewer columns",
+      "columnsMore": "More columns",
+      "columnGap": "Разрыв столбцов",
+      "justifyText": "Выровнять текст по ширине",
+      "hyphenation": "Перенос",
+      "themes": {
+        "default": "Default",
+        "gray": "Gray",
+        "sepia": "Sepia",
+        "crimson": "Crimson",
+        "meadow": "Meadow",
+        "rosewood": "Rosewood",
+        "azure": "Azure",
+        "dawnlight": "Dawnlight",
+        "ember": "Ember",
+        "aurora": "Aurora",
+        "ocean": "Ocean",
+        "mist": "Mist",
+        "amoled": "AMOLED"
+      },
+      "fonts": {
+        "bookDefault": "Book default",
+        "serif": "Serif",
+        "sansSerif": "Sans-serif",
+        "monospace": "Monospace"
       }
     },
     "search": {
@@ -6116,6 +6197,10 @@
   "series": {
     "completion": {
       "readOfTotal": "{read} прочитанного {total} ({percentage}%)"
+    },
+    "ownership": {
+      "label": "In library",
+      "ownedOfExpected": "{owned} of {expected} in library"
     },
     "gaps": {
       "label": "Возможные пробелы:"
@@ -6921,7 +7006,8 @@
       "users": "Пользователи",
       "account-activity": "Активность аккаунта",
       "magic-links": "Волшебные ссылки",
-      "oidc": "OIDC / ССО"
+      "oidc": "OIDC / ССО",
+      "server-fonts": "Server Fonts"
     },
     "system": {
       "file-naming": "Именование файлов",

@@ -1133,7 +1133,15 @@
         "users": "Uporabniki",
         "account-activity": "Dejavnost računov",
         "magic-links": "Čarobne povezave",
-        "oidc": "OIDC / SSO"
+        "oidc": "OIDC / SSO",
+        "server-fonts": "Server Fonts"
+      },
+      "serverFonts": {
+        "title": "Server Fonts",
+        "subtitle": "Upload fonts that every user can pick in the eBook reader, without uploading their own.",
+        "listLabel": "Server fonts",
+        "noFontsYet": "No server fonts yet",
+        "noFontsHint": "Fonts you add here appear in every user's reader."
       }
     },
     "common": {
@@ -1668,7 +1676,12 @@
         "deleteFamilyFailed": "Brisanje družine pisav ni uspelo",
         "demoCannotManage": "Demo-omejeni račun ne more upravljati pisav",
         "fileAdded": "\"{name}\" dodano",
-        "uploadFailed": "Nalaganje ni uspelo"
+        "uploadFailed": "Nalaganje ni uspelo",
+        "serverFontsTitle": "Server fonts (shared by admin)",
+        "serverFontsHint": "These fonts come from your server administrator. Turn one off to keep it out of your reader.",
+        "serverFontsShown": "{count} of {total} shown",
+        "serverFontsAllHidden": "All server fonts are hidden. Your reader will only offer built-in and your own fonts.",
+        "serverFontVisibilityFailed": "Failed to update server font visibility"
       },
       "bookDock": {
         "title": "Odložišče knjig",
@@ -2866,7 +2879,6 @@
       "BookDelete": "Izbriši knjigo",
       "BookBulkMetadataRefresh": "Osveži metapodatke knjige",
       "BookBulkDelete": "Izbriši knjige",
-      "BookBulkMove": "Move books",
       "BookBulkCoverReextract": "Ponovno izlušči naslovnice knjig",
       "BookBulkSetStatus": "Nastavi stanje knjige",
       "BookBulkSetRating": "Nastavi oceno knjige",
@@ -2874,6 +2886,7 @@
       "BookBulkUpdateTags": "Posodobi oznake knjig",
       "BookBulkSetMetadataLock": "Nastavitev zaklepanja metapodatkov",
       "BookBulkEditMetadata": "Urejanje metapodatkov knjige",
+      "BookBulkMoveLibrary": "Move books to another library",
       "BookReadingStateReset": "Ponastavi stanje branja",
       "BookWriteAndRename": "Zapiši metapodatke in preimenuj datoteko",
       "CollectionCreate": "Ustvari zbirko",
@@ -3332,8 +3345,12 @@
         "isFinished": "je zaključeno",
         "isLocked": "je zaklenjeno",
         "isUnlocked": "je odklenjeno",
-        "isUpNext": "je naslednje"
+        "isUpNext": "je naslednje",
+        "isTrue": "is yes",
+        "isFalse": "is no"
       },
+      "customFieldsGroup": "Custom fields",
+      "customFieldFallback": "Custom field",
       "anyProvider": "Kateri koli ponudnik",
       "communityRatingProvider": "Ponudnik ocen skupnosti",
       "loadingLibraries": "Nalaganje knjižnic ...",
@@ -3364,31 +3381,6 @@
     "deleteDialog": {
       "title": "Izbrišem knjigo?",
       "description": "S tem boste trajno izbrisali knjigo ter vse njene metapodatke, datoteke, napredek branja in zaznamke. Tega dejanja ni mogoče razveljaviti."
-    },
-    "moveDialog": {
-      "title": "{count, plural, =0 {Move # book to library} few {Move # books to library} one {Move # book to library} two {Move # books to library} other {Move # books to library}}",
-      "description": "Files are moved into the target library's folder. Reading progress, annotations, and collections stay with the books.",
-      "multiLibraryHint": "Books that are already in the selected library are skipped.",
-      "targetLibrary": "Target library",
-      "targetFolder": "Target folder",
-      "selectLibrary": "Select a library…",
-      "selectFolder": "Select a folder…",
-      "move": "Move"
-    },
-    "moveOutcomes": {
-      "book_not_found": "Book not found",
-      "no_source_access": "No access to the source library",
-      "source_access_check_failed": "The source library access check failed",
-      "book_processing": "The book is still processing",
-      "book_missing": "The book's files are missing",
-      "already_in_target": "The book is already in the target library",
-      "format_not_allowed": "The book's format is not allowed in the target library",
-      "target_path_taken": "The target path is already used by another book",
-      "target_path_exists": "A file already exists at the target path",
-      "path_escapes_target": "The resolved file path leaves the target folder",
-      "database_update_failed": "The database update failed",
-      "file_move_failed": "Moving the files failed",
-      "file_move_failed_rollback_incomplete": "Moving the files failed and the rollback was incomplete, please verify the book"
     },
     "bulkEdit": {
       "title": "{count, plural, =0 {Uredi metapodatke - # knjiga} one {Uredi metapodatke - # knjiga} two {Uredi metapodatke - # knjig} few {Uredi metapodatke - # knjig} other {Uredi metapodatke - # knjig}}",
@@ -3654,11 +3646,6 @@
         "primary": "Primarno",
         "peek": "Hitri pogled",
         "sendViaEmail": "Pošlji po e-pošti",
-        "moveToLibrary": "Move to Library",
-        "moveSuccess": "Book moved",
-        "moveFailed": "Failed to move book",
-        "moveNotMoved": "Book was not moved",
-        "moveNotMovedWithReason": "Book was not moved: {reason}",
         "personalReview": {
           "title": "Osebna ocena",
           "toggleAria": "Preklopi osebno oceno",
@@ -4108,7 +4095,11 @@
         "seriesPlaceholder": "Serija",
         "moveUp": "Premakni navzgor",
         "moveDown": "Premakni navzdol",
-        "removeSeries": "Odstrani serijo"
+        "removeSeries": "Odstrani serijo",
+        "seriesIndexLabel": "Position in series",
+        "totalLabel": "Books in series",
+        "totalPlaceholder": "of",
+        "totalHint": "Total books in this series. Shared with everyone who has this series."
       }
     },
     "table": {
@@ -4188,6 +4179,69 @@
       },
       "text": {
         "openDetails": "Odpri podrobnosti"
+      }
+    },
+    "move": {
+      "title": "{count, plural, one {Move # book} two {Move # books} few {Move # books} other {Move # books}}",
+      "subtitle": "Files move on disk into the destination library. This can change who can see these books.",
+      "searchPlaceholder": "Search libraries",
+      "currentLibrary": "Current",
+      "folderCount": "{count, plural, one {# folder} two {# folders} few {# folders} other {# folders}}",
+      "continue": "Continue",
+      "back": "Back",
+      "confirm": "{count, plural, one {Move # book} two {Move # books} few {Move # books} other {Move # books}}",
+      "action": "Move to library",
+      "review": {
+        "ready": "{count} ready",
+        "collisions": "{count, plural, one {# name conflict} two {# name conflicts} few {# name conflicts} other {# name conflicts}}",
+        "ineligible": "{count} cannot move",
+        "alreadyThere": "{count} already there",
+        "collisionsHeading": "Name conflicts",
+        "ineligibleHeading": "Cannot be moved",
+        "moreCollisions": "and {count} more"
+      },
+      "policy": {
+        "suggested": "Use suggested",
+        "keep_both": "Keep both",
+        "merge": "Merge",
+        "skip": "Skip"
+      },
+      "collision": {
+        "folder_path": "A book already uses this folder name",
+        "file_path": "A file already uses this path",
+        "hash_duplicate": "An identical copy is already in this library"
+      },
+      "ineligible": {
+        "book_not_present": "The files for this book are missing",
+        "no_content_file": "This book has no readable file",
+        "multi_file_target_per_file": "The destination stores one file per book, and this book has {detail} files",
+        "no_source_access": "You cannot edit the library this book is in",
+        "pattern_unresolved": "The destination library has no usable naming pattern",
+        "path_too_long": "The destination path would be too long",
+        "path_outside_target_root": "The destination path would fall outside the library folder"
+      },
+      "warning": {
+        "accessLoss": "{user} will stop seeing {count} of these books",
+        "koboImpact": "{count} books will leave {user}'s Kobo on the next sync",
+        "layout": {
+          "wrap_into_folder": "{count} books will each be placed in their own folder",
+          "dissolve_folder": "{count} book folders will be dissolved into single files"
+        },
+        "crossDevice": "Files move to another drive, so they are copied, verified, then removed."
+      },
+      "progress": {
+        "label": "Moving books to {library}",
+        "failed": "{count} failed"
+      },
+      "done": {
+        "summary": "Moved {count} books to {library}",
+        "merged": "{count} merged with copies already there",
+        "skipped": "{count} skipped",
+        "failed": "{count} failed"
+      },
+      "toast": {
+        "success": "Moved {count} books to {library}",
+        "partial": "Moved {moved} books, {failed} failed"
       }
     }
   },
@@ -4545,7 +4599,6 @@
       "lockAll": "Zakleni vse",
       "unlockAll": "Odkleni vse",
       "exportMetadata": "Izvozi metapodatke",
-      "moveToLibrary": "Move to library",
       "deleteSelected": "Izbriši izbrano",
       "exitSelection": "Zapri izbiranje",
       "downloadFilesZipLabel": "Prenesi datoteke kot ZIP:",
@@ -4722,6 +4775,14 @@
         "upNextInSeries": "Naslednje v seriji",
         "random": "Odkrij nekaj novega",
         "smartScope": "Pametni obseg"
+      },
+      "shelfLayout": {
+        "title": "Shelf layout",
+        "description": "Choose how shelves are arranged on larger screens.",
+        "wide": "Wide rows",
+        "wideDescription": "Show one shelf per row.",
+        "twoColumns": "Two columns",
+        "twoColumnsDescription": "Show two shelves per row."
       },
       "reorderHintWidget": "Povleci za spremembo vrstnega reda. Preklopi za prikaz ali skritje gradnika.",
       "reorderHintShelf": "Povleci za spremembo vrstnega reda. Preklopi za prikaz ali skritje police.",
@@ -5895,46 +5956,66 @@
     "settings": {
       "title": "Nastavitve",
       "ariaLabel": "Nastavitve bralnika",
-      "tabs": {
-        "appearance": "Videz",
-        "text": "Besedilo",
-        "layout": "Postavitev"
-      },
-      "appearance": {
-        "mode": "Način",
+      "reset": "Reset to defaults",
+      "modeLabel": "Color mode",
+      "mode": {
         "light": "Svetlo",
-        "dark": "Temno",
-        "colorTheme": "Barvna tema"
+        "dark": "Temno"
       },
-      "text": {
-        "fontSize": "Velikost pisave",
-        "fontSizeRange": "Obseg: 10-32px",
-        "lineHeight": "Višina vrstice",
-        "lineHeightRange": "Obseg: 0.8-3.0",
-        "fontFamily": "Družina pisav",
-        "fontFamilyDescription": "Izberite vgrajene ali naložene pisave za besedilo.",
-        "builtIn": "Vgrajeno",
-        "yourFonts": "Vaše pisave"
+      "textSize": "Text size",
+      "textSizeSmaller": "Smaller text",
+      "textSizeLarger": "Larger text",
+      "pixels": "{value} px",
+      "percent": "{value}%",
+      "pageColor": "Page color",
+      "font": "Font",
+      "fontBuiltIn": "Vgrajeno",
+      "fontServer": "Server fonts",
+      "fontYours": "Vaše pisave",
+      "lineSpacing": "Line spacing",
+      "pageWidth": "Page width",
+      "pageWidthNarrow": "Narrow",
+      "pageWidthMedium": "Medium",
+      "pageWidthWide": "Wide",
+      "pageWidthFull": "Full",
+      "readingFlow": "Potek branja",
+      "flow": {
+        "paginated": "Pages",
+        "scrolled": "Scroll"
       },
-      "layout": {
-        "pageSpreads": "Razpon strani",
-        "pageSpreadsDescription": "Izberite, kako ta na slikah temelječ EPUB združuje strani.",
+      "pageSpreads": "Razpon strani",
+      "pageSpreadsHint": "Izberite, kako ta na slikah temelječ EPUB združuje strani.",
+      "spread": {
         "bookDefault": "Privzeto za knjigo",
-        "singlePage": "Ena stran",
-        "readingFlow": "Potek branja",
-        "readingFlowDescription": "Preklapljajte med branjem po straneh in neprekinjenim drsenjem.",
-        "paginated": "Po straneh",
-        "scrolled": "Drsenje",
-        "textColumns": "Stolpci besedila",
-        "textColumnsRange": "Obseg: 1-10",
-        "columnGap": "Razmik med stolpci",
-        "columnGapRange": "Obseg: 0-50%",
-        "maxWidth": "Največja širina",
-        "maxWidthRange": "Obseg: 400-1600",
-        "justifyText": "Poravnaj besedilo",
-        "justifyTextDescription": "Omogoči poravnavo odstavkov na polno širino.",
-        "hyphenation": "Deljenje besed",
-        "hyphenationDescription": "Omogoči samodejno deljenje besed."
+        "singlePage": "Ena stran"
+      },
+      "advanced": "Advanced layout",
+      "columns": "Columns",
+      "columnsFewer": "Fewer columns",
+      "columnsMore": "More columns",
+      "columnGap": "Razmik med stolpci",
+      "justifyText": "Poravnaj besedilo",
+      "hyphenation": "Deljenje besed",
+      "themes": {
+        "default": "Default",
+        "gray": "Gray",
+        "sepia": "Sepia",
+        "crimson": "Crimson",
+        "meadow": "Meadow",
+        "rosewood": "Rosewood",
+        "azure": "Azure",
+        "dawnlight": "Dawnlight",
+        "ember": "Ember",
+        "aurora": "Aurora",
+        "ocean": "Ocean",
+        "mist": "Mist",
+        "amoled": "AMOLED"
+      },
+      "fonts": {
+        "bookDefault": "Book default",
+        "serif": "Serif",
+        "sansSerif": "Sans-serif",
+        "monospace": "Monospace"
       }
     },
     "search": {
@@ -6116,6 +6197,10 @@
   "series": {
     "completion": {
       "readOfTotal": "prebranih {read} od {total} ({percentage} %)"
+    },
+    "ownership": {
+      "label": "In library",
+      "ownedOfExpected": "{owned} of {expected} in library"
     },
     "gaps": {
       "label": "Možne vrzeli:"
@@ -6921,7 +7006,8 @@
       "users": "Uporabniki",
       "account-activity": "Dejavnost računa",
       "magic-links": "Čarobne povezave",
-      "oidc": "OIDC / SSO"
+      "oidc": "OIDC / SSO",
+      "server-fonts": "Server Fonts"
     },
     "system": {
       "file-naming": "Poimenovanje datotek",

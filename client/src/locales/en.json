@@ -1133,7 +1133,15 @@
         "users": "Users",
         "account-activity": "Account Activity",
         "magic-links": "Magic Links",
-        "oidc": "OIDC / SSO"
+        "oidc": "OIDC / SSO",
+        "server-fonts": "Server Fonts"
+      },
+      "serverFonts": {
+        "title": "Server Fonts",
+        "subtitle": "Upload fonts that every user can pick in the eBook reader, without uploading their own.",
+        "listLabel": "Server fonts",
+        "noFontsYet": "No server fonts yet",
+        "noFontsHint": "Fonts you add here appear in every user's reader."
       }
     },
     "common": {
@@ -1668,7 +1676,12 @@
         "deleteFamilyFailed": "Failed to delete font family",
         "demoCannotManage": "Demo-restricted account cannot manage fonts",
         "fileAdded": "\"{name}\" added",
-        "uploadFailed": "Upload failed"
+        "uploadFailed": "Upload failed",
+        "serverFontsTitle": "Server fonts (shared by admin)",
+        "serverFontsHint": "These fonts come from your server administrator. Turn one off to keep it out of your reader.",
+        "serverFontsShown": "{count} of {total} shown",
+        "serverFontsAllHidden": "All server fonts are hidden. Your reader will only offer built-in and your own fonts.",
+        "serverFontVisibilityFailed": "Failed to update server font visibility"
       },
       "bookDock": {
         "title": "Book Dock",
@@ -2866,7 +2879,6 @@
       "BookDelete": "Delete book",
       "BookBulkMetadataRefresh": "Refresh book metadata",
       "BookBulkDelete": "Delete books",
-      "BookBulkMove": "Move books",
       "BookBulkCoverReextract": "Re-extract book covers",
       "BookBulkSetStatus": "Set book status",
       "BookBulkSetRating": "Set book rating",
@@ -2874,6 +2886,7 @@
       "BookBulkUpdateTags": "Update book tags",
       "BookBulkSetMetadataLock": "Set metadata locks",
       "BookBulkEditMetadata": "Edit book metadata",
+      "BookBulkMoveLibrary": "Move books to another library",
       "BookReadingStateReset": "Reset reading state",
       "BookWriteAndRename": "Write metadata and rename file",
       "CollectionCreate": "Create collection",
@@ -3332,8 +3345,12 @@
         "isFinished": "is finished",
         "isLocked": "is locked",
         "isUnlocked": "is unlocked",
-        "isUpNext": "is up next"
+        "isUpNext": "is up next",
+        "isTrue": "is yes",
+        "isFalse": "is no"
       },
+      "customFieldsGroup": "Custom fields",
+      "customFieldFallback": "Custom field",
       "anyProvider": "Any provider",
       "communityRatingProvider": "Community rating provider",
       "loadingLibraries": "Loading libraries...",
@@ -3364,31 +3381,6 @@
     "deleteDialog": {
       "title": "Delete book?",
       "description": "This will permanently delete the book and all its metadata, files, reading progress, and bookmarks. This cannot be undone."
-    },
-    "moveDialog": {
-      "title": "{count, plural, =0 {Move # book to library} one {Move # book to library} other {Move # books to library}}",
-      "description": "Files are moved into the target library's folder. Reading progress, annotations, and collections stay with the books.",
-      "multiLibraryHint": "Books that are already in the selected library are skipped.",
-      "targetLibrary": "Target library",
-      "targetFolder": "Target folder",
-      "selectLibrary": "Select a library…",
-      "selectFolder": "Select a folder…",
-      "move": "Move"
-    },
-    "moveOutcomes": {
-      "book_not_found": "Book not found",
-      "no_source_access": "No access to the source library",
-      "source_access_check_failed": "The source library access check failed",
-      "book_processing": "The book is still processing",
-      "book_missing": "The book's files are missing",
-      "already_in_target": "The book is already in the target library",
-      "format_not_allowed": "The book's format is not allowed in the target library",
-      "target_path_taken": "The target path is already used by another book",
-      "target_path_exists": "A file already exists at the target path",
-      "path_escapes_target": "The resolved file path leaves the target folder",
-      "database_update_failed": "The database update failed",
-      "file_move_failed": "Moving the files failed",
-      "file_move_failed_rollback_incomplete": "Moving the files failed and the rollback was incomplete, please verify the book"
     },
     "bulkEdit": {
       "title": "{count, plural, =0 {Edit metadata - # book} one {Edit metadata - # book} other {Edit metadata - # books}}",
@@ -3654,11 +3646,6 @@
         "primary": "Primary",
         "peek": "Peek",
         "sendViaEmail": "Send via Email",
-        "moveToLibrary": "Move to Library",
-        "moveSuccess": "Book moved",
-        "moveFailed": "Failed to move book",
-        "moveNotMoved": "Book was not moved",
-        "moveNotMovedWithReason": "Book was not moved: {reason}",
         "personalReview": {
           "title": "Personal Review",
           "toggleAria": "Toggle personal review",
@@ -4108,7 +4095,11 @@
         "seriesPlaceholder": "Series",
         "moveUp": "Move up",
         "moveDown": "Move down",
-        "removeSeries": "Remove series"
+        "removeSeries": "Remove series",
+        "seriesIndexLabel": "Position in series",
+        "totalLabel": "Books in series",
+        "totalPlaceholder": "of",
+        "totalHint": "Total books in this series. Shared with everyone who has this series."
       }
     },
     "table": {
@@ -4188,6 +4179,69 @@
       },
       "text": {
         "openDetails": "Open details"
+      }
+    },
+    "move": {
+      "title": "{count, plural, one {Move # book} other {Move # books}}",
+      "subtitle": "Files move on disk into the destination library. This can change who can see these books.",
+      "searchPlaceholder": "Search libraries",
+      "currentLibrary": "Current",
+      "folderCount": "{count, plural, one {# folder} other {# folders}}",
+      "continue": "Continue",
+      "back": "Back",
+      "confirm": "{count, plural, one {Move # book} other {Move # books}}",
+      "action": "Move to library",
+      "review": {
+        "ready": "{count} ready",
+        "collisions": "{count, plural, one {# name conflict} other {# name conflicts}}",
+        "ineligible": "{count} cannot move",
+        "alreadyThere": "{count} already there",
+        "collisionsHeading": "Name conflicts",
+        "ineligibleHeading": "Cannot be moved",
+        "moreCollisions": "and {count} more"
+      },
+      "policy": {
+        "suggested": "Use suggested",
+        "keep_both": "Keep both",
+        "merge": "Merge",
+        "skip": "Skip"
+      },
+      "collision": {
+        "folder_path": "A book already uses this folder name",
+        "file_path": "A file already uses this path",
+        "hash_duplicate": "An identical copy is already in this library"
+      },
+      "ineligible": {
+        "book_not_present": "The files for this book are missing",
+        "no_content_file": "This book has no readable file",
+        "multi_file_target_per_file": "The destination stores one file per book, and this book has {detail} files",
+        "no_source_access": "You cannot edit the library this book is in",
+        "pattern_unresolved": "The destination library has no usable naming pattern",
+        "path_too_long": "The destination path would be too long",
+        "path_outside_target_root": "The destination path would fall outside the library folder"
+      },
+      "warning": {
+        "accessLoss": "{user} will stop seeing {count} of these books",
+        "koboImpact": "{count} books will leave {user}'s Kobo on the next sync",
+        "layout": {
+          "wrap_into_folder": "{count} books will each be placed in their own folder",
+          "dissolve_folder": "{count} book folders will be dissolved into single files"
+        },
+        "crossDevice": "Files move to another drive, so they are copied, verified, then removed."
+      },
+      "progress": {
+        "label": "Moving books to {library}",
+        "failed": "{count} failed"
+      },
+      "done": {
+        "summary": "Moved {count} books to {library}",
+        "merged": "{count} merged with copies already there",
+        "skipped": "{count} skipped",
+        "failed": "{count} failed"
+      },
+      "toast": {
+        "success": "Moved {count} books to {library}",
+        "partial": "Moved {moved} books, {failed} failed"
       }
     }
   },
@@ -4545,7 +4599,6 @@
       "lockAll": "Lock all",
       "unlockAll": "Unlock all",
       "exportMetadata": "Export metadata",
-      "moveToLibrary": "Move to library",
       "deleteSelected": "Delete selected",
       "exitSelection": "Exit selection",
       "downloadFilesZipLabel": "Download files as ZIP:",
@@ -4722,6 +4775,14 @@
         "upNextInSeries": "Up Next in Series",
         "random": "Discover Something New",
         "smartScope": "Smart Scope"
+      },
+      "shelfLayout": {
+        "title": "Shelf layout",
+        "description": "Choose how shelves are arranged on larger screens.",
+        "wide": "Wide rows",
+        "wideDescription": "Show one shelf per row.",
+        "twoColumns": "Two columns",
+        "twoColumnsDescription": "Show two shelves per row."
       },
       "reorderHintWidget": "Drag to reorder. Toggle to show or hide a widget.",
       "reorderHintShelf": "Drag to reorder. Toggle to show or hide a shelf.",
@@ -5895,46 +5956,66 @@
     "settings": {
       "title": "Settings",
       "ariaLabel": "Reader settings",
-      "tabs": {
-        "appearance": "Appearance",
-        "text": "Text",
-        "layout": "Layout"
-      },
-      "appearance": {
-        "mode": "Mode",
+      "reset": "Reset to defaults",
+      "modeLabel": "Color mode",
+      "mode": {
         "light": "Light",
-        "dark": "Dark",
-        "colorTheme": "Color theme"
+        "dark": "Dark"
       },
-      "text": {
-        "fontSize": "Font size",
-        "fontSizeRange": "Range: 10-32px",
-        "lineHeight": "Line height",
-        "lineHeightRange": "Range: 0.8-3.0",
-        "fontFamily": "Font family",
-        "fontFamilyDescription": "Choose built-in or uploaded fonts for body text.",
-        "builtIn": "Built-in",
-        "yourFonts": "Your fonts"
+      "textSize": "Text size",
+      "textSizeSmaller": "Smaller text",
+      "textSizeLarger": "Larger text",
+      "pixels": "{value} px",
+      "percent": "{value}%",
+      "pageColor": "Page color",
+      "font": "Font",
+      "fontBuiltIn": "Built-in",
+      "fontServer": "Server fonts",
+      "fontYours": "Your fonts",
+      "lineSpacing": "Line spacing",
+      "pageWidth": "Page width",
+      "pageWidthNarrow": "Narrow",
+      "pageWidthMedium": "Medium",
+      "pageWidthWide": "Wide",
+      "pageWidthFull": "Full",
+      "readingFlow": "Reading flow",
+      "flow": {
+        "paginated": "Pages",
+        "scrolled": "Scroll"
       },
-      "layout": {
-        "pageSpreads": "Page spreads",
-        "pageSpreadsDescription": "Choose how this image-based EPUB pairs pages.",
+      "pageSpreads": "Page spreads",
+      "pageSpreadsHint": "Choose how this image-based EPUB pairs pages.",
+      "spread": {
         "bookDefault": "Book default",
-        "singlePage": "Single page",
-        "readingFlow": "Reading flow",
-        "readingFlowDescription": "Switch between paged and continuous scrolling.",
-        "paginated": "Paginated",
-        "scrolled": "Scrolled",
-        "textColumns": "Text columns",
-        "textColumnsRange": "Range: 1-10",
-        "columnGap": "Column gap",
-        "columnGapRange": "Range: 0-50%",
-        "maxWidth": "Max width",
-        "maxWidthRange": "Range: 400-1600",
-        "justifyText": "Justify text",
-        "justifyTextDescription": "Enable full-width paragraph alignment.",
-        "hyphenation": "Hyphenation",
-        "hyphenationDescription": "Enable automatic word-break hyphenation."
+        "singlePage": "Single page"
+      },
+      "advanced": "Advanced layout",
+      "columns": "Columns",
+      "columnsFewer": "Fewer columns",
+      "columnsMore": "More columns",
+      "columnGap": "Column gap",
+      "justifyText": "Justify text",
+      "hyphenation": "Hyphenation",
+      "themes": {
+        "default": "Default",
+        "gray": "Gray",
+        "sepia": "Sepia",
+        "crimson": "Crimson",
+        "meadow": "Meadow",
+        "rosewood": "Rosewood",
+        "azure": "Azure",
+        "dawnlight": "Dawnlight",
+        "ember": "Ember",
+        "aurora": "Aurora",
+        "ocean": "Ocean",
+        "mist": "Mist",
+        "amoled": "AMOLED"
+      },
+      "fonts": {
+        "bookDefault": "Book default",
+        "serif": "Serif",
+        "sansSerif": "Sans-serif",
+        "monospace": "Monospace"
       }
     },
     "search": {
@@ -6116,6 +6197,10 @@
   "series": {
     "completion": {
       "readOfTotal": "{read} of {total} read ({percentage}%)"
+    },
+    "ownership": {
+      "label": "In library",
+      "ownedOfExpected": "{owned} of {expected} in library"
     },
     "gaps": {
       "label": "Possible gaps:"
@@ -6921,7 +7006,8 @@
       "users": "Users",
       "account-activity": "Account Activity",
       "magic-links": "Magic Links",
-      "oidc": "OIDC / SSO"
+      "oidc": "OIDC / SSO",
+      "server-fonts": "Server Fonts"
     },
     "system": {
       "file-naming": "File Naming",
